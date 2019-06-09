@@ -1,0 +1,69 @@
+select * from[dbo].[booking_order]
+select * from[dbo].[booking_table]
+select * from[dbo].[customer]
+select * from[dbo].[delivery]
+select * from[dbo].[food]
+select * from[dbo].[location]
+select * from[dbo].[order_details]
+select * from[dbo].[payment]
+select * from[dbo].[seat]
+select * from[dbo].[supplier]
+select * from[dbo].[time_table]
+select * from [dbo].[restaurant]
+TRUNCATE TABLE [dbo].[seat]
+insert into seat values
+(224,334,1),
+(225,335,2),
+(226,336,2),
+(227,337,2),
+(228,338,2),
+(229,339,2),
+(230,340,2),
+(231,341,2),
+(232,342,2),
+(233,343,2),
+(234,344,2),
+(235,345,1),
+(236,346,3),
+(237,347,3),
+(238,348,3),
+(239,349,3),
+(240,350,3);
+update food 
+set restaurant_ID=1
+where food_id=101
+drop * from food
+--count of the v and non v and c food details
+select re.restaurant_name,( re.restaurant_ID) as count from restaurant as re join seat as se on re.restaurant_ID=se.restaurant_id 
+                                join booking_table as bt on se.table_id=bt.table_id
+								join food as fo on bt.food=fo.food_id
+								where restaurant_type='v'
+								--     or
+select re.restaurant_name,( re.restaurant_ID) as count from restaurant as re join food as fo 
+                             on re.restaurant_ID = fo.restaurant_id
+							 where restaurant_type='v'
+
+
+
+   --foreign key remove and add & drop the column             
+alter table [dbo].[food] drop column [restaurant_id]
+alter table [dbo].[food] drop constraint FK__food__restaurant__3F115E1A
+alter table [dbo].[food] drop column[restaurant_id]
+
+alter table [dbo].[food] add restaurant_id int null foreign key references[dbo].[restaurant]([restaurant_ID])
+
+update [dbo].[food] set [restaurant_id]=1  where food_id=101
+update [dbo].[food] set [restaurant_id]=2 where food_id=102
+update [dbo].[food] set [restaurant_id]=3 where food_id=103 
+
+
+
+insert into [dbo].[booking_table] values(3,101,21,1) ,(4,104,224,3),
+                                 (5,105,225,4),
+                                 (6,106,226,4),
+                                 (7,107,227,5),
+                                  (9,109,229,6),
+                                  (10,110,230,6),
+                                (12,112,232,7),
+                              (13,113,233,9),
+                               (14,114,234,8)

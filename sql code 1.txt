@@ -1,0 +1,93 @@
+create table restaurant(
+	restaurant_ID int not null primary key,
+	restaurant_name varchar(19) not null,
+	restaurant_address varchar(30) not null,
+	restaurant_pin int not null,
+	restaurant_type char not null,
+	cusine char(232) not null,
+	region varchar(30),
+	--constraint pk_rest primary key (restaurant_ID,cusine)
+	)
+
+
+	alter table customer add constraint pk_cust primary key ([user_name],[customer_address] )
+
+	drop table  restaurant
+
+
+
+	create table customer(
+	login_id int not null primary key,
+	customer_name varchar(30)not null,
+	customer_password varchar(30) not null,
+	customer_phoneno int not null,
+	customer_email varchar(20) not null,
+	customer_address varchar(50) not null,
+	customer_pin int not null,
+	--constraint pk_cust primary key (login_id,customer_address,customer_name)
+	)
+
+
+	create table delivery(
+	delivery_id int not null primary key,
+	order_id int not null foreign key references  [dbo].[booking_order]([order_id]),
+	login_id int not null foreign key references [dbo].[customer]([login_id]) ,
+	supplier_id int not null,
+	delivery_info varchar(50) not null,
+	customer_address varchar not null 
+	)
+
+
+
+	drop table customer
+	alter table restaurant drop column "cusine";
+
+
+	create table food (
+	food_id int not null primary key,
+	food_name varchar(30) not null,
+	food_price int not null,
+	food_type varchar not null,
+	food_time time
+	)
+
+
+	alter table booking_order add food_id int not null foreign key references food(food_id)
+	alter table booking_order add default order_date (getdate())
+
+
+	create table seat(
+	table_id int not null primary key,
+	floor_no smallint not null,
+	order_id int not null foreign key references [dbo].[booking_order]([order_id])
+	)
+
+
+	create table time_table(
+		duration time not null,
+		availability_time char(10)not null,
+		table_id int not null foreign key references [dbo].[seat]([table_id])
+		)
+		alter table time_table alter column availability_time char (1) not null
+		alter table booking_order column order_date date  default(getdate())
+
+		alter table booking_order add constraint default_order_date default(getdate()) for order_date
+
+		create table supplier(
+		  supplier_id int not null primary key,
+		  supplier_name varchar(50) not null,
+		  supplier_contact int not null,
+		  delivery_id int not null foreign key references [dbo].[delivery]([delivery_id]),
+		   supplier_email varchar(50) not null)
+
+
+		create table payment(
+		  payment_id int not null primary key,
+		  card_number int not null,
+		  bank_name varchar(50),
+		  customer_id int not null foreign key references [dbo].[customer]([login_id]),
+		  order_id int not null foreign key references [dbo].[booking_order]([order_id])
+		)
+		
+		
+
